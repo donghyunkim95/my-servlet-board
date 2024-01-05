@@ -1,0 +1,40 @@
+package com.kitri.myservletboard.Service;
+
+import com.kitri.myservletboard.dao.BoardDao;
+import com.kitri.myservletboard.dao.BoardMemoryDao;
+import com.kitri.myservletboard.data.Board;
+
+import java.util.ArrayList;
+
+public class BoardService {
+
+    // 게시판 리스트를 가져오는 로직
+
+    //싱글톤으로 만들어보자
+
+    BoardDao boardDao = BoardMemoryDao.getInstance();
+
+    private BoardService() {};
+    private static final BoardService instance = new BoardService();
+
+    public static BoardService getInstance() {
+        return instance;
+    }
+
+    public ArrayList<Board> getBoards () {
+        return boardDao.getAll();
+    }
+
+    public void addBoard(Board board) {
+    //Board board가 필요한 이유 : 데이터를 넣기 위함
+        boardDao.save(board);
+    }
+
+    public void updateBoard(Board board) {
+        boardDao.update(board);
+    }
+
+    public void deleteBoard(Board board) {
+        boardDao.delete(board);
+    }
+}

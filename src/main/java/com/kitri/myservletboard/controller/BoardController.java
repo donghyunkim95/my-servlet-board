@@ -1,5 +1,8 @@
 package com.kitri.myservletboard.controller;
 
+import com.kitri.myservletboard.Service.BoardService;
+import com.kitri.myservletboard.data.Board;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,9 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 @WebServlet("/board/*")
 public class BoardController extends HttpServlet {
+
+    BoardService boardService = BoardService.getInstance();
+
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -35,6 +42,11 @@ public class BoardController extends HttpServlet {
             // ㄴ 리다이렉트로 응답해보기
 //            response.sendRedirect("list.jsp");
 //            response.addHeader("Refresh", "2; url= " + "/view/board/list.jsp");
+            ArrayList<Board> boards = boardService.getBoards(); // 게시판 리스트
+            // 서비스를 통해 게시판 리스트를 가져왔다.
+            // jsp에게 넘겨줘야 게시판을 동적으로 만든다.
+            // request 에 attribute 를 이용하자
+            request.setAttribute("boards", boards);
             view +="list.jsp";
 
         } else if (command.equals("/board/createForm")){

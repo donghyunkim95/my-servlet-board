@@ -1,3 +1,5 @@
+<%@ page import="com.kitri.myservletboard.data.Board" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,86 +109,21 @@
           </tr>
         </thead>
         <tbody class="table-group-divider">
+        <%
+          ArrayList<Board> boards = (ArrayList<Board>) request.getAttribute("boards");
+          for (int i = 0; i <boards.size(); i++) {
+        %>
           <tr>
-            <th scope="row">1</th>
-            <td>게시판 test 1</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
+            <th scope="row"><%= boards.get(i).getId()%> </th>
+            <td><%= boards.get(i).getTitle()%>
+            <td><%= boards.get(i).getWriter()%>
+            <td><%= boards.get(i).getCreateAt()%>
+            <td><%= boards.get(i).getViewCount()%>
+            <td><%= boards.get(i).getCommentCount()%> </td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>게시판 test 2</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>게시판 test 3</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>게시판 test 4</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td>게시판 test 5</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td>게시판 test 6</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">7</th>
-            <td>게시판 test 7</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">8</th>
-            <td>게시판 test 8</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">9</th>
-            <td>게시판 test 9</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">10</th>
-            <td>게시판 test 10</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
+          <%
+            }
+          %>
         </tbody>
       </table>
       <div>
