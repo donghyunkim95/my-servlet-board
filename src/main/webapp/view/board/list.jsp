@@ -1,3 +1,5 @@
+<%@ page import="com.kitri.myservletboard.data.Board" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,7 +84,6 @@
       <ul class="nav-items">
         <li><a href="/board/list">게시글목록</a></li>
         <li><a href="/board/createForm">게시글등록</a></li>
-        <li><a href="/board/updateForm">게시글수정</a></li>
         <li><a href="/view/member/join.jsp">회원가입</a></li>
         <li><a href="/view/member/registration.jsp">회원정보수정</a></li>
         <li><a href="/view/member/login.jsp">로그인</a></li>
@@ -107,90 +108,28 @@
           </tr>
         </thead>
         <tbody class="table-group-divider">
+        <%
+          ArrayList<Board> boards = (ArrayList<Board>) request.getAttribute("boards");
+          for (int i = 0; i <boards.size(); i++) {
+        %>
           <tr>
-            <th scope="row">1</th>
-            <td>게시판 test 1</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
+            <th scope="row"><%=boards.get(i).getId()%> </th>
+            <td><a href ="board/detail?id=<%=boards.get(i).getId()%>">
+                <%= boards.get(i).getTitle()%>
+              <%--  id가 의미하는건 boards.get(i).getId() 이다.
+                    동적인 데이터, 값을 넣고 싶을 때에는 <%%> 로 넣어준다. --%>
+            <td><%= boards.get(i).getWriter()%>
+            <td><%= boards.get(i).getCreatedAt()%>
+            <td><%= boards.get(i).getViewCount()%>
+            <td><%= boards.get(i).getCommentCount()%> </td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>게시판 test 2</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>게시판 test 3</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>게시판 test 4</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td>게시판 test 5</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td>게시판 test 6</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">7</th>
-            <td>게시판 test 7</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">8</th>
-            <td>게시판 test 8</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">9</th>
-            <td>게시판 test 9</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">10</th>
-            <td>게시판 test 10</td>
-            <td>admin</td>
-            <td>2024.01.04</td>
-            <td>5</td>
-            <td>2</td>
-          </tr>
+          <%
+            }
+          %>
         </tbody>
       </table>
       <div>
-        <a href="createForm.jsp" role="button" class="btn btn-outline-dark">글쓰기</a>
+        <a href="/board/createForm" role="button" class="btn btn-outline-dark">글쓰기</a>
       </div>
       <div class="d-flex justify-content-center">
       <nav aria-label="Page navigation example">
