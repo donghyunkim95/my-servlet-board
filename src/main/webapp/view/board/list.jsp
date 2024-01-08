@@ -130,7 +130,7 @@
         </tbody>
       </table>
       <div>
-        <a href="createForm.jsp" role="button" class="btn btn-outline-dark">글쓰기</a>
+        <a href="/board/createForm" role="button" class="btn btn-outline-dark">글쓰기</a>
       </div>
       <div class="d-flex justify-content-center">
       <nav aria-label="Page navigation example">
