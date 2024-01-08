@@ -114,10 +114,13 @@
           for (int i = 0; i <boards.size(); i++) {
         %>
           <tr>
-            <th scope="row"><%= boards.get(i).getId()%> </th>
-            <td><%= boards.get(i).getTitle()%>
+            <th scope="row"><%=boards.get(i).getId()%> </th>
+            <td><a href ="board/detail?id=<%=boards.get(i).getId()%>">
+                <%= boards.get(i).getTitle()%>
+              <%--  id가 의미하는건 boards.get(i).getId() 이다.
+                    동적인 데이터, 값을 넣고 싶을 때에는 <%%> 로 넣어준다. --%>
             <td><%= boards.get(i).getWriter()%>
-            <td><%= boards.get(i).getCreateAt()%>
+            <td><%= boards.get(i).getCreatedAt()%>
             <td><%= boards.get(i).getViewCount()%>
             <td><%= boards.get(i).getCommentCount()%> </td>
           </tr>

@@ -10,17 +10,17 @@ public class Board {
         private String title;
         private String content;
         private String writer;
-        private LocalDateTime createAt;
+        private LocalDateTime createdAt;
         private int viewCount;
         private int commentCount;
 
         // 생성자 만들기
-        public Board(Long id, String title, String content, String writer, LocalDateTime createAt, int viewCount, int commentCount) {
+        public Board(Long id, String title, String content, String writer, LocalDateTime createdAt, int viewCount, int commentCount) {
                 this.id = id;
                 this.title = title;
                 this.content = content;
                 this.writer = writer;
-                this.createAt = createAt;
+                this.createdAt = createdAt;
                 this.viewCount = viewCount;
                 this.commentCount = commentCount;
         }
@@ -57,12 +57,12 @@ public class Board {
                 this.writer = writer;
         }
 
-        public LocalDateTime getCreateAt() {
-                return createAt;
+        public LocalDateTime getCreatedAt() {
+                return createdAt;
         }
 
-        public void setCreateAt(LocalDateTime createAt) {
-                this.createAt = createAt;
+        public void setCreatedAt(LocalDateTime createdAt) {
+                this.createdAt = createdAt;
         }
 
         public int getViewCount() {

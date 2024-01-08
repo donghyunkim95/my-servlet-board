@@ -47,37 +47,50 @@ public class BoardController extends HttpServlet {
             // jsp에게 넘겨줘야 게시판을 동적으로 만든다.
             // request 에 attribute 를 이용하자
             request.setAttribute("boards", boards);
-            view +="list.jsp";
+            view += "list.jsp";
 
-        } else if (command.equals("/board/createForm")){
+        } else if (command.equals("/board/createForm")) {
 //            response.sendRedirect("/view/board/createForm.jsp");
             // 요청 : 게시글 등록하게 등록폼 좀 줘
             // 응답 : 등록폼으로 응답
-            view +="createForm.jsp";
+            view += "createForm.jsp";
 
-        } else if (command.equals("/board/create")){
+        } else if (command.equals("/board/create")) {
             // 요청 : 게시판 이렇게 만들어줘
             // 응답 : 등록으로 응답
-        } else if (command.equals("/board/updateForm")){
+        } else if (command.equals("/board/updateForm")) {
 //            response.sendRedirect("/view/board/updateForm.jsp");
             // 요청 : 게시판 이렇게 수정해줘
             // 응답 : 생성으로 응답
-            view +="updateForm.jsp";
+            view += "updateForm.jsp";
 
-        } else if (command.equals("/board/update")){
+        } else if (command.equals("/board/update")) {
             // 요청 : 이 번호의 게시판 삭제 해줘
             // 응답 : 수정으로 응답
-        } else if (command.equals("/board/delete")){
+        } else if (command.equals("/board/delete")) {
             // 요청 : 이 번호의 게시판 삭제 해줘
             // 응답 : 삭제로 응답
-        }
+        } else if (command.contains("/board/detail")) {
+            // id에 해당하는 게시판 하나를 가져오면 된다.
+            // /board/detail?id=3 이런식으로 들어온다.
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-        dispatcher.forward(request, response);
-        // 뷰(페이지)를 응답하는 방법
+            //요청이오면 HttpServletRequest 안에 담겨서 온다.
+            // ★ 개발할 때 tip : 잘 안 된다면 디버그를 잘 이용하자.
+//            String queryString = request.getQueryString();
+            Long id = Long.parseLong(request.getParameter("id"));
+            Board board = boardService.getBoard(id);
+//            System.out.println();
+
+            request.setAttribute("board", board);
+            view += "detail.jsp";
+        }
+            RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+            dispatcher.forward(request, response);
+            // 뷰(페이지)를 응답하는 방법
             // 리다이렉트
 
             // 포워드
+
 
     }
 }

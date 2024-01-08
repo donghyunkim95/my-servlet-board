@@ -21,6 +21,10 @@ public class BoardService {
         return instance;
     }
 
+    public Board getBoard(Long id) {
+        return boardDao.getById(id); // 실제 데이터는 DAO 에서 불러오니까 DAO 호출해야한다.
+    }
+
     public ArrayList<Board> getBoards () {
         return boardDao.getAll();
     }
