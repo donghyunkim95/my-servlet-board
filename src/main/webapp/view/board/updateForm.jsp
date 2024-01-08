@@ -1,3 +1,4 @@
+<%@ page import="com.kitri.myservletboard.data.Board" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -104,7 +105,7 @@
         <nav>
             <ul class="nav-items">
                 <li><a href="/board/list">게시글목록</a></li>
-                <li><a href="/board/createForm">게시글등록</a></li>
+                <li><a href="/board/createForm">게시글등록</a></li>`
                 <li><a href="/board/updateForm">게시글수정</a></li>
                 <li><a href="/view/member/join.jsp">회원가입</a></li>
                 <li><a href="/view/member/registration.jsp">회원정보수정</a></li>
@@ -120,48 +121,51 @@
                 <h4 class="mb-3"><b>게시물 수정</b></h4>
                 <hr>
                 <br>
-                <form class="validation-form" novalidate>
+                <form class="validation-form" novalidate action="/board/update" method="post">
+
+<%--                ★ id를 받아와야한다.--%>
+                    <input name="id" type="text" value="${board.getId()}" hidden>
 
                     <div class="mb-3">
-                        <label for="address">제목</label>
-                        <input type="text" class="form-control" id="title" placeholder="제목을 입력해주세요" required>
+                        <label for="title">제목</label>
+                        <input name="title" type="text" class="form-control" id="title" value="<%=((Board)request.getAttribute("board")).getTitle()%>" required>
                         <div class="invalid-feedback">
-                            제목을 입력해주세요.
+<%--                            제목을 입력해주세요.--%>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="name">작성자</label>
-                            <input type="text" class="form-control" id="name" placeholder="" value="" required>
+                            <input name ="name" type="text" class="form-control" id="name" value="<%=((Board)request.getAttribute("board")).getWriter()%>" required>
                             <div class="invalid-feedback">
                                 작성자를 입력해주세요.
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="name">비밀번호</label>
-                            <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력해주세요"
-                                value="" required>
-                            <div class="invalid-feedback">
-                                비밀번호를 입력해주세요.
-                            </div>
-                        </div>
+
+<%--                        <div class="col-md-6 mb-3">--%>
+<%--                            <label for="name">비밀번호</label>--%>
+<%--                            <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력해주세요"--%>
+<%--                                value="" required>--%>
+<%--                            <div class="invalid-feedback">--%>
+<%--                                비밀번호를 입력해주세요.--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
                     </div>
                     <div class="mb-3">
                         <label for="contents" class="form-label">내용</label>
-                        <textarea name="contents" class="form-control" cols="30" rows="5"
-                            placeholder="내용을 입력해주세요"></textarea>
+                        <textarea name="contents" class="form-control" id="contents" cols="30" rows="5"><%=((Board)request.getAttribute("board")).getContent()%>
+                        </textarea>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <button class="btn btn-secondary btn-block" type="submit">게시물 등록하기</button>
+                            <button class="btn btn-secondary btn-block" type="submit">게시물 수정하기</button>
                         </div>
                         <div class="col-md-6 mb-3">
                             <button class="btn btn-secondary btn-block" type="submit">취소</button>
                         </div>
                     </div>
-            </div>
 
             </form>
         </div>
@@ -191,4 +195,5 @@
         }, false);
     </script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3b
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3b"></script>

@@ -37,7 +37,6 @@ public class BoardController extends HttpServlet {
 
         // 포워드 기능을 위해 view 라는 변수를 선언한다.
         String view = "/view/board/";
-
         out.println("command = " + command);
 
         if (command.equals("/board/list")) {
@@ -86,14 +85,35 @@ public class BoardController extends HttpServlet {
 //            response.sendRedirect("/view/board/updateForm.jsp");
             // 요청 : 게시판 이렇게 수정해줘
             // 응답 : 생성으로 응답
-            view += "updateForm.jsp";
+            Long id = Long.parseLong(request.getParameter("id"));
+            Board board = boardService.getBoard(id);
+            request.setAttribute("board", board);
+            view += "updateForm.jsp"; // 동적인 문법 추가
 
         } else if (command.equals("/board/update")) {
-            // 요청 : 이 번호의 게시판 삭제 해줘
+            // 요청 : 이 번호의 게시판 수정해줘
             // 응답 : 수정으로 응답
+
+            // 수정폼에서 보낸 데이터를 읽어야 한다.
+            // 수정하려는 데이터를 수정한다.
+
+            Long id = Long.parseLong(request.getParameter("id")); //parameter로 읽는게 편하다. () 안에는 .jsp 에 name 을 확인해서 적는다.
+            String title = request.getParameter("title");
+            String contents = request.getParameter("contents");
+
+
+            boardService.updateBoard(new Board(id, title, contents, null, null, 0, 0));
+            // 잘 등록 됐는지 보려면? 리스트로 가는게 좋다. (-> redirect 사용)
+            response.sendRedirect("/board/list");
+            return; // return 넣어줌으로써 종료시킨다.
+
+
         } else if (command.equals("/board/delete")) {
             // 요청 : 이 번호의 게시판 삭제 해줘
             // 응답 : 삭제로 응답
+
+
+
         } else if (command.contains("/board/detail")) {
             // id에 해당하는 게시판 하나를 가져오면 된다.
             // /board/detail?id=3 이런식으로 들어온다.
