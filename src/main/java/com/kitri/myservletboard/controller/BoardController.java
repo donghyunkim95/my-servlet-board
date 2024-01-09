@@ -111,7 +111,11 @@ public class BoardController extends HttpServlet {
         } else if (command.equals("/board/delete")) {
             // 요청 : 이 번호의 게시판 삭제 해줘
             // 응답 : 삭제로 응답
+            Board board=boardService.getBoard(Long.parseLong(request.getParameter("id")));
+            boardService.deleteBoard(board);
 
+            response.sendRedirect("/board/list");
+            return;
 
 
         } else if (command.contains("/board/detail")) {
