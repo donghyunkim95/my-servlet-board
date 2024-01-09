@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class BoardController extends HttpServlet {
 
     BoardService boardService = BoardService.getInstance();
+    private java.time.LocalDateTime LocalDateTime;
 
 
     //service 는 등록 조회 다 받아주는 만능이다.
@@ -72,7 +73,7 @@ public class BoardController extends HttpServlet {
             // 기본생성자를 통해 setter를 통해 데이터를 넣어줘도 되고
             // this. 으로 해줘도 된다.
 
-            Board board =  new Board(null, title, contents, name, LocalDateTime.now(), 0, 0);
+            Board board =  new Board(null, title, contents, name, LocalDateTime, 0, 0);
             // id : 오브젝트타입이니까 null을 사용할 수 있다.
             // 조회수랑 댓글수는 처음 게시글이니까 0 0 으로 지정해준다.
 
