@@ -1,6 +1,7 @@
 package com.kitri.myservletboard.controller;
 
 import com.kitri.myservletboard.Service.BoardService;
+import com.kitri.myservletboard.data.Pagination;
 import com.kitri.myservletboard.data.Board;
 
 import javax.servlet.RequestDispatcher;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @WebServlet("/board/*")
@@ -38,7 +38,7 @@ public class BoardController extends HttpServlet {
 
         // 포워드 기능을 위해 view 라는 변수를 선언한다.
         String view = "/view/board/";
-        out.println("command = " + command);
+//        out.println("command = " + command);
 
         if (command.equals("/board/list")) {
             // 요청 : 게시글 리스트 좀 보여줘
@@ -46,10 +46,28 @@ public class BoardController extends HttpServlet {
             // ㄴ 리다이렉트로 응답해보기
 //            response.sendRedirect("list.jsp");
 //            response.addHeader("Refresh", "2; url= " + "/view/board/list.jsp");
-            ArrayList<Board> boards = boardService.getBoards(); // 게시판 리스트
+//            ArrayList<Board> boards = boardService.getBoards(); // 게시판 리스트
             // 서비스를 통해 게시판 리스트를 가져왔다.
             // jsp에게 넘겨줘야 게시판을 동적으로 만든다.
             // request 에 attribute 를 이용하자
+
+            // 페이지네이션 - 페이지 정보를 같이 넘겨주자
+            // url 이 /board/list?page=3 이라면? 얘를 읽어줘야 한다.
+            // /board/list~ 는 request에 있다.
+
+            String page = request.getParameter("page");
+            if (page == null) page = "1";
+            Pagination pagination = new Pagination(Integer.parseInt(page));
+
+//            pagination.setTotalRecords(boardService.getBoards().size()); // totalRecords = 0; // ★ 전체 갯수 셀 수 있는 방법 - 세한
+//            위의 방법은 아이디어 적으로는 좋은 방법이지만
+//            로직 측면으로 봤을 때 controller 가 로직을 다 처리하는 것이 좋은 방법은 아니다.
+
+            ArrayList<Board> boards
+                    = boardService.getBoards(pagination); // 게시판 리스트
+
+
+            request.setAttribute("pagination", pagination); // 페이지네이션 정보
             request.setAttribute("boards", boards);
             view += "list.jsp";
 

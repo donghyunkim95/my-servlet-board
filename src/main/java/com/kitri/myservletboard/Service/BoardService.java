@@ -2,7 +2,7 @@ package com.kitri.myservletboard.Service;
 
 import com.kitri.myservletboard.dao.BoardDao;
 import com.kitri.myservletboard.dao.BoardJdbcDao;
-import com.kitri.myservletboard.dao.BoardMemoryDao;
+import com.kitri.myservletboard.data.Pagination;
 import com.kitri.myservletboard.data.Board;
 
 import java.util.ArrayList;
@@ -28,6 +28,14 @@ public class BoardService {
 
     public ArrayList<Board> getBoards () {
         return boardDao.getAll();
+    }
+
+    public ArrayList<Board> getBoards (Pagination pagination) {
+        pagination.setTotalRecords(((BoardJdbcDao)boardDao).count()); // totalRecords의 값 계산
+        // 얘가 되면 이제 계산을 할 수 있게 된다.
+        pagination.calcPagination();
+
+        return boardDao.getAll(pagination);
     }
 
     public void addBoard(Board board) {

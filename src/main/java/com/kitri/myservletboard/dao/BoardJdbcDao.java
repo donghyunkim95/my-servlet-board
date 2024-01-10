@@ -1,13 +1,11 @@
 package com.kitri.myservletboard.dao;
 
 import com.kitri.myservletboard.data.Board;
-import com.mysql.cj.jdbc.Driver;
+import com.kitri.myservletboard.data.Pagination;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Locale;
-
 
 
 public class BoardJdbcDao implements BoardDao {
@@ -36,8 +34,13 @@ public class BoardJdbcDao implements BoardDao {
         return conn;
     }
 
-    @Override // 게시글 목록 확인
+    @Override
     public ArrayList<Board> getAll() {
+        return null;
+    }
+
+    @Override // 게시글 목록 확인
+    public ArrayList<Board> getAll(Pagination pagination) {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null; // 구현체가 똑같이 맞춰줘야 한다. (Arraylist~ 타입으로)
@@ -46,8 +49,15 @@ public class BoardJdbcDao implements BoardDao {
 
         try {
             connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
-            String sql = "SELECT * FROM board";
+            String sql = "SELECT * FROM board LIMIT ?,?";
             ps = connection.prepareStatement(sql);
+            ps.setInt(1, (pagination.getPage() -1) * pagination.getMaxRecordsPerPage()); // startIndex
+            ps.setInt(2, (pagination.getMaxRecordsPerPage()));
+            // ★ -1 하는 이유 : 페이지 정보를 받잖아요? 받은 페이지정보를 통해 ? 인 동적 값을 치환해준다.
+            // 1페이지가 왓을때에는 0.10 / 2페이지가 왓을 때에는 10.10 로 만들어줘야한다.
+            // 1페이지가 왓을때 -1 안해주면 1*10 이 되서 2페이지가 불러온다.
+            // 1페이지가 왓을 때 0을 만들어주기 위해 -1 을 해준것이다.
+
             rs = ps.executeQuery();
 
             while (rs.next()) { // 반복문
@@ -217,4 +227,43 @@ public class BoardJdbcDao implements BoardDao {
             }
         }
     }
+
+    public int count () {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; // 구현체가 똑같이 맞춰줘야 한다. (Arraylist~ 타입으로)
+
+        int count = 0;
+
+        try {
+            connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
+            String sql = "SELECT count(*) FROM board";
+
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            // count 결과를 보고싶다면?
+            rs.next();
+            // key 를 읽을 것이니까.
+            count = rs.getInt("count(*)");
+
+
+        } catch (Exception e) {
+
+        } finally {
+            // catch 가 되던 정상작동이 되던 무조건 실행하는 것 : finally
+            try {
+                rs.close();
+                ps.close();
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return count;
+    }
 }
+
+
+
