@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @WebServlet("/board/*")
@@ -63,12 +64,28 @@ public class BoardController extends HttpServlet {
 //            위의 방법은 아이디어 적으로는 좋은 방법이지만
 //            로직 측면으로 봤을 때 controller 가 로직을 다 처리하는 것이 좋은 방법은 아니다.
 
-            ArrayList<Board> boards
-                    = boardService.getBoards(pagination); // 게시판 리스트
 
+            String type = request.getParameter("type");
+            String keyword = request.getParameter("keyword");
+            String period = request.getParameter("date");
+            // date에 minus1이 담겨져서 get 으로 불러온거다.
+            ArrayList<Board> boards = new ArrayList<>();
 
+            if (keyword != null) {
+                boards = boardService.getBoards(period, type, keyword, pagination); // 게시판 리스트
+            } else {
+                boards = boardService.getBoards(pagination);
+            }
+
+            // period 에 스트링 들어온다.
+            // 추가 파라미터를 넣어줘서 조회하자
+
+            request.setAttribute("period", period);
+            request.setAttribute("type", type); // 여기서 type은 위에서 선언한 String type
+            request.setAttribute("keyword", keyword); // 여기서 type은 위에서 선언한 String type
             request.setAttribute("pagination", pagination); // 페이지네이션 정보
             request.setAttribute("boards", boards);
+
             view += "list.jsp";
 
         } else if (command.equals("/board/createForm")) {
@@ -91,7 +108,7 @@ public class BoardController extends HttpServlet {
             // 기본생성자를 통해 setter를 통해 데이터를 넣어줘도 되고
             // this. 으로 해줘도 된다.
 
-            Board board =  new Board(null, title, contents, name, LocalDateTime, 0, 0);
+            Board board = new Board(null, title, contents, name, LocalDateTime, 0, 0);
             // id : 오브젝트타입이니까 null을 사용할 수 있다.
             // 조회수랑 댓글수는 처음 게시글이니까 0 0 으로 지정해준다.
 
@@ -130,7 +147,7 @@ public class BoardController extends HttpServlet {
         } else if (command.equals("/board/delete")) {
             // 요청 : 이 번호의 게시판 삭제 해줘
             // 응답 : 삭제로 응답
-            Board board=boardService.getBoard(Long.parseLong(request.getParameter("id")));
+            Board board = boardService.getBoard(Long.parseLong(request.getParameter("id")));
             boardService.deleteBoard(board);
 
             response.sendRedirect("/board/list");
@@ -150,14 +167,11 @@ public class BoardController extends HttpServlet {
 
             request.setAttribute("board", board);
             view += "detail.jsp";
+
         }
-            RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-            dispatcher.forward(request, response);
-            // 뷰(페이지)를 응답하는 방법
-            // 리다이렉트
 
-            // 포워드
-
+        RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+        dispatcher.forward(request, response);
 
     }
 }

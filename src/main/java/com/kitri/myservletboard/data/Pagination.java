@@ -10,6 +10,7 @@ public class Pagination {
 
     private int startIndex = 0;
     private int totalRecords = 0; // ★ 전체 갯수
+                                    // ★ 불러온 게시글의 전체 개수
 
     private boolean hasNext = false;
     private boolean hasPrev = false;
@@ -24,7 +25,7 @@ public class Pagination {
         // ★ 전체 갯수가 필요하다. 전채 갯수가 있어야 다음 페이지로 넘어갈 지도 정할 수 있고 ... 할 수 있기 때문이다.
 
 
-        int totalPages = (int)(Math.ceil((double)this.totalRecords / this.maxPagesOnScreen)); // 전체 페이지수 = 전체 게시글 / 10
+        int totalPages = (int)(Math.ceil((double)this.totalRecords / this.maxRecordsPerPage)); // 전체 페이지수 = 전체 게시글 / 10
         // Math.ceil -> double 형식 : 반올림해주는 것
         this.startPageOnScreen =
                 ((int)Math.ceil((double) this.page / this.maxPagesOnScreen) -1) * this.maxPagesOnScreen + 1; //화면시작페이지 (1,6,11...)= (현재페이지 (2) / 화면에서 맥스페이지 (5) -1) * 맥스페이지 (5) +1

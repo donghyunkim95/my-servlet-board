@@ -4,6 +4,7 @@ import com.kitri.myservletboard.Service.BoardService;
 import com.kitri.myservletboard.data.Board;
 import com.kitri.myservletboard.data.Pagination;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 // 인터페이스로 해야 수정이 쉽다.
@@ -17,6 +18,10 @@ public interface BoardDao {
     // 게시글 목록 확인
     ArrayList<Board> getAll();
     ArrayList<Board> getAll(Pagination pagination);
+
+    ArrayList<Board> getAll(String type, String keyword, Pagination pagination);
+
+    ArrayList<Board> getAll(String period, String type, String keyword, Pagination pagination);
 
     public Board getById (Long id); // board를 하나만 가져오는 것
 
