@@ -2,8 +2,10 @@ package com.kitri.myservletboard.dao;
 
 import com.kitri.myservletboard.data.Board;
 import com.kitri.myservletboard.data.Pagination;
+import com.kitri.myservletboard.data.SearchData;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -76,6 +78,111 @@ public class BoardJdbcDao implements BoardDao {
 //                System.out.println("failed");
 //            }
 //            System.out.println("success");
+        } catch (Exception e) {
+
+        } finally {
+            // catch 가 되던 정상작동이 되던 무조건 실행하는 것 : finally
+            try {
+                rs.close();
+                ps.close();
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return boards; // arraylist를 return 해준다.
+    }
+
+    @Override
+    public ArrayList<Board> getAll(String type, String keyword, Pagination pagination) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; // 구현체가 똑같이 맞춰줘야 한다. (Arraylist~ 타입으로)
+
+        ArrayList<Board> boards = new ArrayList<>();
+
+        if (type == null) {
+            type = "title";
+        }
+        if (keyword == null) {
+            keyword = "";
+        }
+
+
+        try {
+            connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
+            String sql = "SELECT * FROM board WHERE " + type + " LIKE '%" + keyword + "%' LIMIT ?,?;";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, (pagination.getPage() -1) * pagination.getMaxRecordsPerPage()); // startIndex
+            ps.setInt(2, (pagination.getMaxRecordsPerPage()));
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // 반복문
+                // 데이터를 컬럼 단위로 읽는다.
+                Long id = rs.getLong("id");
+                String title = rs.getString("title");
+                String content = rs.getString("content");
+                String writer = rs.getString("writer");
+                LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+                int viewCount = rs.getInt("view_count");
+                int commentCount = rs.getInt("comment_count");
+
+                boards.add(new Board(id, title, content, writer, createdAt, viewCount, commentCount));
+            }
+
+        } catch (Exception e) {
+
+        } finally {
+            // catch 가 되던 정상작동이 되던 무조건 실행하는 것 : finally
+            try {
+                rs.close();
+                ps.close();
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return boards; // arraylist를 return 해준다.
+    }
+
+    @Override
+    public ArrayList<Board> getAll(String period, String type, String keyword, Pagination pagination) {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; // 구현체가 똑같이 맞춰줘야 한다. (Arraylist~ 타입으로)
+
+        ArrayList<Board> boards = new ArrayList<>();
+        SearchData searchData = new SearchData(); // ★ 메서드 호출
+
+
+
+        try {
+            connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
+
+            String sql = sql = "SELECT * FROM board WHERE " + type + " LIKE '%" + keyword + "%' AND created_at BETWEEN DATE_ADD(NOW(), INTERVAL -"
+                          + searchData.getDate(period) + " DAY ) AND NOW() LIMIT ?,?;";
+
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, (pagination.getPage() -1) * pagination.getMaxRecordsPerPage()); // startIndex
+            ps.setInt(2, (pagination.getMaxRecordsPerPage()));
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // 반복문
+                // 데이터를 컬럼 단위로 읽는다.
+                Long id = rs.getLong("id");
+                String title = rs.getString("title");
+                String content = rs.getString("content");
+                String writer = rs.getString("writer");
+                LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+                int viewCount = rs.getInt("view_count");
+                int commentCount = rs.getInt("comment_count");
+
+                boards.add(new Board(id, title, content, writer, createdAt, viewCount, commentCount));
+            }
+
         } catch (Exception e) {
 
         } finally {
@@ -233,7 +340,7 @@ public class BoardJdbcDao implements BoardDao {
         PreparedStatement ps = null;
         ResultSet rs = null; // 구현체가 똑같이 맞춰줘야 한다. (Arraylist~ 타입으로)
 
-        int count = 0;
+        int count = 0; // int : 갯수로 받는다, int count =0 초기값을 정해줌
 
         try {
             connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
@@ -243,9 +350,9 @@ public class BoardJdbcDao implements BoardDao {
             rs = ps.executeQuery();
 
             // count 결과를 보고싶다면?
-            rs.next();
+            rs.next(); // count 를 읽음 (66)
             // key 를 읽을 것이니까.
-            count = rs.getInt("count(*)");
+            count = rs.getInt("count(*)");   // 문자열을 int로 바꾸고 count로 넣어줌
 
 
         } catch (Exception e) {
@@ -255,6 +362,50 @@ public class BoardJdbcDao implements BoardDao {
             try {
                 rs.close();
                 ps.close();
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return count;
+    }
+
+    public int searchCount (String type, String keyword) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; // 구현체가 똑같이 맞춰줘야 한다. (Arraylist~ 타입으로)
+
+        int count = 0; // int : 갯수로 받는다, int count =0 초기값을 정해줌
+
+        // type은 안 넣어줘도 된다.
+
+
+        try {
+            String sql = null;
+            connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
+            if (keyword == null) {
+                sql = "SELECT COUNT(*) FROM board";
+            } else {
+                sql = "SELECT COUNT(*) FROM board WHERE " + type + " LIKE '%" + keyword + "%'";
+            }
+
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            // count 결과를 보고싶다면?
+            rs.next(); // count 를 읽음 (66) // 자바에서 DB 결과를 한줄 읽음
+            // key 를 읽을 것이니까.
+            count = rs.getInt("count(*)");   // 문자열을 int로 바꾸고 count로 넣어줌
+
+
+        } catch (Exception e) {
+
+        } finally {
+            // catch 가 되던 정상작동이 되던 무조건 실행하는 것 : finally
+            try {
+                rs.close();
+                    ps.close();
                 connection.close();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -26,9 +26,6 @@ public class BoardService {
         return boardDao.getById(id); // 실제 데이터는 DAO 에서 불러오니까 DAO 호출해야한다.
     }
 
-    public ArrayList<Board> getBoards () {
-        return boardDao.getAll();
-    }
 
     public ArrayList<Board> getBoards (Pagination pagination) {
         pagination.setTotalRecords(((BoardJdbcDao)boardDao).count()); // totalRecords의 값 계산
@@ -36,6 +33,20 @@ public class BoardService {
         pagination.calcPagination();
 
         return boardDao.getAll(pagination);
+    }
+
+    public ArrayList<Board> getBoards (String type, String keyword, Pagination pagination) {
+        pagination.setTotalRecords(((BoardJdbcDao)boardDao).searchCount(type, keyword)); // totalRecords의 값 계산
+        // 얘가 되면 이제 계산을 할 수 있게 된다.
+        pagination.calcPagination();
+        return boardDao.getAll(type, keyword, pagination);
+    }
+
+    public ArrayList<Board> getBoards (String period, String type, String keyword, Pagination pagination) {
+        pagination.setTotalRecords(((BoardJdbcDao)boardDao).searchCount(type, keyword)); // totalRecords의 값 계산
+        // 얘가 되면 이제 계산을 할 수 있게 된다.
+        pagination.calcPagination();
+        return boardDao.getAll(period, type, keyword, pagination);
     }
 
     public void addBoard(Board board) {
