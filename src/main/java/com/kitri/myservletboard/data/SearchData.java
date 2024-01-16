@@ -23,6 +23,16 @@ public class SearchData {
         return 0;
     }
 
+    private String orderBy;
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
     public void setPeriod(String period) {
         this.period = period;
     }

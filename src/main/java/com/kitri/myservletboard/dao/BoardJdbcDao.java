@@ -157,8 +157,6 @@ public class BoardJdbcDao implements BoardDao {
         ArrayList<Board> boards = new ArrayList<>();
         SearchData searchData = new SearchData(); // ★ 메서드 호출
 
-
-
         try {
             connection = connectDB(); // 반환하는 값 : connectDB() 가 connection 변수에 잘 들어와야 한다.
 

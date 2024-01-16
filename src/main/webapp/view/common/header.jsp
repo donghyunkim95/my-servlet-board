@@ -5,18 +5,22 @@
 </head>
 <body>
 
-    <header>
+    <header class="d-flex flex-row">
+
     <a class="logo" href="/board/list"><span class="material-symbols-outlined">clear_day</span></a>
     <nav>
         <ul class="nav-items">
-            <li><a href="/board/createForm">게시글등록</a></li>
+            <li><a href="/board/list">게시글목록</a></li>
             <li><a href="/view/member/join.jsp">회원가입</a></li>
             <li><a href="/view/member/registration.jsp">회원정보수정</a></li>
             <li><a href="/view/member/login.jsp">로그인</a></li>
+        </ul>
+    </nav>
+        <div class="flex-fill"></div>
             <%--        무조건 name 설정을 준 속성들이 나갈수 있다. type, keyword       --%>
-            <form class="d-flex" role="search" action="/board/list">
-                <select name="date">
-                    <option value="totalDate">전체기간</option>
+            <form class="form-inline my-2 my-lg-0 ml-auto pr-5" role="search" action="/board/list">
+                <select name="period">
+                    <option value="">전체기간</option>
                     <option value="1"${param.created_at == "1" ? "selected" : ""}>1일</option>
                     <option value="7"${param.created_at == "7" ? "selected" : ""}>7일</option>
                     <option value="30"${param.created_at == "30" ? "selected" : ""}>1달</option>
@@ -33,8 +37,6 @@
                 value="${param.keyword}">
                 <button class="btn btn-outline-dark" type="submit">Search</button>
             </form>
-        </ul>
-    </nav>
 </header>
 
 </body>
