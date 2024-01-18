@@ -31,8 +31,25 @@
   <jsp:param name="created_at" value="<%=period%>"/>
 </jsp:include>
 
-<div>
-  <h2 style="text-align: center; margin-top: 100px;"><b>게시판 목록</b></h2>
+<div class="d-flex pt-5 mt-5">
+  <div class="flex-fill w-25"></div>
+  <h2 class="flex-fill w-50" style="text-align: center;"><b>게시판 목록</b></h2>
+  <form class="flex-fill w-25 pr-5 mr-5">
+    <select name="orderBy" onchange="this.form.submit()">
+      <option value="latest">최신순</option>
+      <option value="oldest">과거순</option>
+      <option value="views">조회순</option>
+    </select>
+    <select name="maxRecordsPerPage" onchange="this.form.submit()">
+      <option value="5">5개씩 보기</option>
+      <option value="10">10개씩 보기</option>
+      <option value="15">15개씩 보기</option>
+      <option value="20">20개씩 보기</option>
+      <option value="30">30개씩 보기</option>
+      <option value="40">40개씩 보기</option>
+      <option value="50">50개씩 보기</option>
+    </select>
+  </form>
 </div>
 <div class="container class=d-flex justify-content-center">
   <div class="p-2 border-primary mb-3">

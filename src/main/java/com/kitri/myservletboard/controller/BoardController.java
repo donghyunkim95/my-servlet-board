@@ -3,6 +3,7 @@ package com.kitri.myservletboard.controller;
 import com.kitri.myservletboard.Service.BoardService;
 import com.kitri.myservletboard.data.Pagination;
 import com.kitri.myservletboard.data.Board;
+import com.kitri.myservletboard.data.SearchData;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -68,8 +69,12 @@ public class BoardController extends HttpServlet {
             String type = request.getParameter("type");
             String keyword = request.getParameter("keyword");
             String period = request.getParameter("date");
+            String orderBy = request.getParameter("orderBy");
+            String maxRecordsPerPage = request.getParameter("maxRecordsPerPage");
+
             // date에 minus1이 담겨져서 get 으로 불러온거다.
             ArrayList<Board> boards = new ArrayList<>();
+            SearchData searchData = new SearchData();
 
             if (keyword != null) {
                 boards = boardService.getBoards(period, type, keyword, pagination); // 게시판 리스트
@@ -77,6 +82,9 @@ public class BoardController extends HttpServlet {
                 boards = boardService.getBoards(pagination);
             }
 
+            if (orderBy == null) {
+                boards = boardService.getBoards(period, type, keyword, pagination);
+            }
             // period 에 스트링 들어온다.
             // 추가 파라미터를 넣어줘서 조회하자
 
